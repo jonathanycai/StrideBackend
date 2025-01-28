@@ -1,0 +1,19 @@
+{
+  "name": "stridebackend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonathanycai/StrideBackend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jonathanycai/StrideBackend/issues"
+  },
+  "homepage": "https://github.com/jonathanycai/StrideBackend#readme"
+}
