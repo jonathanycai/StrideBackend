@@ -7,14 +7,16 @@
 
 <body>
     <button onclick="startAuth()">Login with Spotify</button>
+
     <div id="result"></div>
 
     <script>
         function startAuth() {
+            // Just call your backend's /auth/login route
             window.location.href = 'http://localhost:5001/auth/login';
         }
 
-        // Parse tokens from URL after redirect
+        // When redirected back with ?access_token=...&refresh_token=...
         const urlParams = new URLSearchParams(window.location.search);
         const accessToken = urlParams.get('access_token');
         const refreshToken = urlParams.get('refresh_token');
@@ -25,7 +27,7 @@
         <p>Access Token: ${accessToken}</p>
         <p>Refresh Token: ${refreshToken}</p>
       `;
-            // Clean URL
+            // Clean up the query params so they don’t stay in the address bar
             window.history.replaceState({}, '', '/');
         }
     </script>
