@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Auth Tester</title>
+</head>
+
+<body>
+    <button onclick="startAuth()">Login with Spotify</button>
+    <div id="result"></div>
+
+    <script>
+        function startAuth() {
+            window.location.href = 'http://localhost:5001/auth/login';
+        }
+
+        // Parse tokens from URL after redirect
+        const urlParams = new URLSearchParams(window.location.search);
+        const accessToken = urlParams.get('access_token');
+        const refreshToken = urlParams.get('refresh_token');
+
+        if (accessToken) {
+            document.getElementById('result').innerHTML = `
+        <h3>✅ Auth Successful!</h3>
+        <p>Access Token: ${accessToken}</p>
+        <p>Refresh Token: ${refreshToken}</p>
+      `;
+            // Clean URL
+            window.history.replaceState({}, '', '/');
+        }
+    </script>
+</body>
+
+</html>
