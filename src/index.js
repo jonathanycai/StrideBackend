@@ -23,6 +23,11 @@ app.get('/', (req, res) => {
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
 
+// Player route handler
+app.get('/player', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'player.html'));
+});
+
 // Start server
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
