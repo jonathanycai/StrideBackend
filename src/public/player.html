@@ -15,36 +15,13 @@
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script>
         async function getAccessToken() {
+            // Fetch the current access token from your server
             const response = await fetch('http://localhost:5001/auth/token');
             const data = await response.json();
             return data.access_token;
         }
 
-        window.onSpotifyWebPlaybackSDKReady = async () => {
-            const accessToken = await getAccessToken();
-            const player = new Spotify.Player({
-                name: 'Web Player',
-                getOAuthToken: (cb) => { cb(accessToken); },
-                volume: 0.5
-            });
-
-            player.connect().then(success => {
-                if (success) console.log('Connected to Spotify!');
-            });
-
-            document.getElementById('play').onclick = () => player.resume();
-            document.getElementById('pause').onclick = () => player.pause();
-
-            player.addListener('player_state_changed', (state) => {
-                if (state) {
-                    const track = state.track_window.current_track;
-                    document.getElementById('track-info').innerHTML = `
-            Now Playing: ${track.name} by ${track.artists[0].name}
-          `;
-                }
-            });
-        };
-
+        // Helper function to tell Spotify to play a specific URI
         async function playTrack(uri) {
             const accessToken = await getAccessToken();
             await fetch('https://api.spotify.com/v1/me/player/play', {
@@ -53,11 +30,48 @@
                     'Authorization': `Bearer ${accessToken}`,
                     'Content-Type': 'application/json'
                 },
+                // If you want to play a track, you'll pass an array of URIs. 
+                // For a playlist, you'd pass { context_uri: 'spotify:playlist:xxxxx' } 
+                // Instead of { uris: [...] } 
                 body: JSON.stringify({ uris: [uri] })
             });
         }
 
-        playTrack('spotify:track:4iV5W9uYEdYUVa79Axb7Rh'); 
+        window.onSpotifyWebPlaybackSDKReady = async () => {
+            const accessToken = await getAccessToken();
+            const player = new Spotify.Player({
+                name: 'My Web Player',
+                getOAuthToken: cb => cb(accessToken),
+                volume: 0.5
+            });
+
+            // Connect to the player
+            player.connect().then(success => {
+                if (success) {
+                    console.log('Connected to Spotify!');
+
+                    // Example: call playTrack with your chosen URI
+                    // This can be a single track, e.g. 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh'
+                    // or an album: 'spotify:album:xxx'
+                    // or a playlist context: 'spotify:playlist:xxx'
+                    playTrack('spotify:track:0d2Twch3UzAIY8yePbkAzz');
+                }
+            });
+
+            // Bind Play/Pause buttons
+            document.getElementById('play').onclick = () => player.resume();
+            document.getElementById('pause').onclick = () => player.pause();
+
+            // Track state changes
+            player.addListener('player_state_changed', state => {
+                if (state) {
+                    const track = state.track_window.current_track;
+                    document.getElementById('track-info').innerHTML = `
+            Now Playing: ${track.name} by ${track.artists[0].name}
+          `;
+                }
+            });
+        };
     </script>
 </body>
 

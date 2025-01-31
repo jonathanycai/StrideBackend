@@ -11,22 +11,22 @@ app.use(cors({
     credentials: true
 }));
 
-// Serve static files from public directory
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Root route handler
+// Root route (existing auth tester)
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// New player route
+app.get('/player', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'player.html'));
 });
 
 // Auth routes
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
-
-// Player route handler
-app.get('/player', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'player.html'));
-});
 
 // Start server
 const PORT = process.env.PORT || 5001;
